@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">SpotView</string>
+
+    <!-- Chaines de caractères de la page Accueil -->
+    <string name="ac_charger">Charger un modèle</string>
+    <string name="ac_text">Bienvenue sur l\'application SpotView \n(mieux que StreetView)</string>
+    <string name="ac_creer">Créer un modèle</string>
+    <string name="ac_nm1">Non modèle n°1</string>
+    <string name="ac_nm2">Non modèle n°2</string>
+    <string name="ac_nm3">Non modèle n°3</string>
+
+    <!-- Chaines de caractères de la page Séléction Modèle -->
+    <string name="sm_text">Choisissez un modèle dans la liste pour \nle visualiser, ou le modifier</string>
+    <string name="sm_import">Importer</string>
+    <string name="sm_visu">Visualiser</string>
+    <string name="sm_modif">Modifier</string>
+    <string name="sm_suppr">Supprimer</string>
+    <string name="sm_cancel">Annuler</string>
+    <string name="sm_confirm">Confirmer</string>
+
+    <!-- Chaines de caractères de la page Gestion Modèle -->
+    <string name="gm_text">Choisissez une image, un nom et un \ndescriptif du modèle</string>
+    <string name="gm_choose">Choisir Image</string>
+    <string name="gm_gest">Gestionnaire de pièces</string>
+    <string name="gm_save">Sauvegarder</string>
+
+    <!-- Chaines de caractères de la page Gestion Pièces -->
+    <string name="gp_text">Choisissez une pièce pour pouvoir la \nmodifier</string>
+    <string name="gp_create">Créer</string>
+    <string name="gp_cancel">Annuler</string>
+    <string name="gp_confirm">Confirmer</string>
+    <string name="gp_modif">Modifier</string>
+    <string name="gp_suppr">Supprimer</string>
+
+    <!-- Chaines de caractères de la page Gestion Photos Pièce -->
+    <string name="gpp_text">Séléctionner un point cardinal pour gérer \nl'image et les accès</string>
+
+    <!-- Chaines de caractères de la page Gestion Photo-->
+    <string name="gph_text">Prenez une photo orienté (N, S, E, O) et\n gérer les accès</string>
+    <string name="gph_take">Prendre une photo</string>
+    <string name="gph_addAcc">Ajout d\'accès</string>
+    <string name="gph_supprAcc">Suppression d\'accès</string>
+    <string name="gph_cancel">Annuler</string>
+    <string name="gph_continue">Continuer</string>
+    <string name="gph_add">Ajouter</string>
+    <string name="gph_confirm">Confirmer</string>
+
 </resources>

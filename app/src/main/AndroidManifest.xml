@@ -13,6 +13,24 @@
         android:theme="@style/Theme.SpotView"
         tools:targetApi="31">
         <activity
+            android:name=".Visualisation"
+            android:exported="false" />
+        <activity
+            android:name=".GestionPhoto"
+            android:exported="false" />
+        <activity
+            android:name=".GestionPhotosPiece"
+            android:exported="false" />
+        <activity
+            android:name=".GestionPieces"
+            android:exported="false" />
+        <activity
+            android:name=".GestionModele"
+            android:exported="false" />
+        <activity
+            android:name=".SelectionModele"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
