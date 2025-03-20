@@ -17,9 +17,13 @@
     <string name="sm_suppr">Supprimer</string>
     <string name="sm_cancel">Annuler</string>
     <string name="sm_confirm">Confirmer</string>
+    <string name="sm_nameM">Nom du modèle choisi</string>
 
     <!-- Chaines de caractères de la page Gestion Modèle -->
     <string name="gm_text">Choisissez une image, un nom et un \ndescriptif du modèle</string>
+    <string name="gm_name">Choissisez un nom</string>
+    <string name="gm_desc">Description</string>
+    <string name="gm_descInfo">Description du modèle</string>
     <string name="gm_choose">Choisir Image</string>
     <string name="gm_gest">Gestionnaire de pièces</string>
     <string name="gm_save">Sauvegarder</string>
@@ -31,6 +35,7 @@
     <string name="gp_confirm">Confirmer</string>
     <string name="gp_modif">Modifier</string>
     <string name="gp_suppr">Supprimer</string>
+    <string name="gp_nameSelect">Nom de la pièce séléctionnée</string>
 
     <!-- Chaines de caractères de la page Gestion Photos Pièce -->
     <string name="gpp_text">Séléctionner un point cardinal pour gérer \nl'image et les accès</string>

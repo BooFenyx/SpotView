@@ -5,4 +5,117 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GestionModele"/>
+    tools:context=".GestionModele">
+
+    <Button
+        android:id="@+id/gm_saveB"
+        android:layout_width="270dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="36dp"
+        android:text="@string/gm_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_gestB" />
+
+    <TextView
+        android:id="@+id/gm_descInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/gm_descInfo"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/gm_descZoneText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_modifB" />
+
+    <Button
+        android:id="@+id/gm_modifB"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/sm_modif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_Image" />
+
+    <ImageView
+        android:id="@+id/gm_Image"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_nameZoneText"
+        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+
+    <include
+        layout="@layout/custom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/gm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="@string/gm_text"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/gm_gestB"
+        android:layout_width="270dp"
+        android:layout_height="50dp"
+        android:text="@string/gm_gest"
+        app:layout_constraintBottom_toTopOf="@+id/gm_saveB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_descZoneText" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/gm_nameZoneText"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/gm_nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/gm_name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/gm_descZoneText"
+        android:layout_width="280dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/gm_gestB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gm_descInfo">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/gm_descText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/gm_desc"
+            android:singleLine="false"
+            android:textAlignment="viewStart" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
