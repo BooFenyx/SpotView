@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary">
 
     <!-- Bouton de retour à gauche -->
+
+    <!-- Titre centré -->
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center_vertical"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Retour"
         android:scaleType="centerInside"
-        android:src="@drawable/back_arrow" />
+        android:src="@drawable/back_arrow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Titre centré -->
     <TextView
         android:id="@+id/toolbar_title"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="18dp"
         android:gravity="center_vertical"
         android:text="@string/app_name"
-        android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
-</androidx.appcompat.widget.Toolbar>
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

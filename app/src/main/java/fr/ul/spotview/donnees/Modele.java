@@ -1,8 +1,9 @@
 package fr.ul.spotview.donnees;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Modele {
+public class Modele implements Serializable {
 
     private ArrayList<Piece> listePiece;        //Une liste de pièce qui compose un modèle
     private String nom;                         //Le nom du modèle

@@ -14,7 +14,7 @@
 
 
   <TextView
-      android:id="@+id/textView4"
+      android:id="@+id/textViewM2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="61dp"
@@ -22,9 +22,9 @@
       android:textSize="10sp"
       android:textStyle="bold"
       app:layout_constraintBottom_toTopOf="@+id/ac_chargerB"
-      app:layout_constraintEnd_toEndOf="@+id/imageButton4"
-      app:layout_constraintStart_toStartOf="@+id/imageButton4"
-      app:layout_constraintTop_toBottomOf="@+id/imageButton4" />
+      app:layout_constraintEnd_toEndOf="@+id/imageButtonM2"
+      app:layout_constraintStart_toStartOf="@+id/imageButtonM2"
+      app:layout_constraintTop_toBottomOf="@+id/imageButtonM2" />
 
   <Button
       android:id="@+id/ac_chargerB"
@@ -40,15 +40,15 @@
       app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
   <ImageButton
-      android:id="@+id/imageButton"
+      android:id="@+id/imageButtonCreate"
       android:layout_width="100dp"
       android:layout_height="100dp"
       android:layout_marginStart="71dp"
       android:layout_marginTop="110dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
-      app:layout_constraintBottom_toTopOf="@+id/imageButton4"
-      app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+      app:layout_constraintBottom_toTopOf="@+id/imageButtonM2"
+      app:layout_constraintEnd_toStartOf="@+id/imageButtonM1"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/ac_text"
       app:srcCompat="@android:drawable/ic_menu_add" />
@@ -60,15 +60,15 @@
       android:text="@string/ac_creer"
       android:textSize="10sp"
       android:textStyle="bold"
-      app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-      app:layout_constraintEnd_toEndOf="@+id/imageButton"
+      app:layout_constraintBottom_toBottomOf="@+id/imageButtonCreate"
+      app:layout_constraintEnd_toEndOf="@+id/imageButtonCreate"
       app:layout_constraintHorizontal_bias="0.535"
-      app:layout_constraintStart_toStartOf="@+id/imageButton"
-      app:layout_constraintTop_toTopOf="@+id/imageButton"
+      app:layout_constraintStart_toStartOf="@+id/imageButtonCreate"
+      app:layout_constraintTop_toTopOf="@+id/imageButtonCreate"
       app:layout_constraintVertical_bias="0.848" />
 
   <ImageButton
-      android:id="@+id/imageButton2"
+      android:id="@+id/imageButtonM3"
       android:layout_width="100dp"
       android:layout_height="100dp"
       android:layout_marginStart="16dp"
@@ -77,12 +77,12 @@
       android:layout_marginBottom="70dp"
       app:layout_constraintBottom_toTopOf="@+id/ac_chargerB"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/imageButton4"
-      app:layout_constraintTop_toBottomOf="@+id/imageButton3"
+      app:layout_constraintStart_toEndOf="@+id/imageButtonM2"
+      app:layout_constraintTop_toBottomOf="@+id/imageButtonM1"
       app:srcCompat="@android:drawable/ic_menu_add" />
 
   <ImageButton
-      android:id="@+id/imageButton4"
+      android:id="@+id/imageButtonM2"
       android:layout_width="100dp"
       android:layout_height="100dp"
       android:layout_marginStart="71dp"
@@ -90,22 +90,23 @@
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="70dp"
       app:layout_constraintBottom_toTopOf="@+id/ac_chargerB"
-      app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+      app:layout_constraintEnd_toStartOf="@+id/imageButtonM3"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/imageButton"
+      app:layout_constraintTop_toBottomOf="@+id/imageButtonCreate"
       app:srcCompat="@android:drawable/ic_menu_add" />
 
   <ImageButton
-      android:id="@+id/imageButton3"
+      android:id="@+id/imageButtonM1"
       android:layout_width="100dp"
       android:layout_height="100dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="110dp"
       android:layout_marginEnd="71dp"
       android:layout_marginBottom="16dp"
-      app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+      android:scaleType="centerInside"
+      app:layout_constraintBottom_toTopOf="@+id/imageButtonM3"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/imageButton"
+      app:layout_constraintStart_toEndOf="@+id/imageButtonCreate"
       app:layout_constraintTop_toBottomOf="@+id/ac_text"
       app:srcCompat="@android:drawable/ic_menu_add" />
 
@@ -125,20 +126,20 @@
       app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
-      android:id="@+id/textView2"
+      android:id="@+id/textViewM1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="23dp"
       android:text="@string/ac_nm1"
       android:textSize="10sp"
       android:textStyle="bold"
-      app:layout_constraintBottom_toTopOf="@+id/imageButton2"
-      app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-      app:layout_constraintStart_toStartOf="@+id/imageButton3"
-      app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
+      app:layout_constraintBottom_toTopOf="@+id/imageButtonM3"
+      app:layout_constraintEnd_toEndOf="@+id/imageButtonM1"
+      app:layout_constraintStart_toStartOf="@+id/imageButtonM1"
+      app:layout_constraintTop_toBottomOf="@+id/imageButtonM1" />
 
   <TextView
-      android:id="@+id/textView3"
+      android:id="@+id/textViewM3"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="61dp"
@@ -146,8 +147,8 @@
       android:textSize="10sp"
       android:textStyle="bold"
       app:layout_constraintBottom_toTopOf="@+id/ac_chargerB"
-      app:layout_constraintEnd_toEndOf="@+id/imageButton2"
-      app:layout_constraintStart_toStartOf="@+id/imageButton2"
-      app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+      app:layout_constraintEnd_toEndOf="@+id/imageButtonM3"
+      app:layout_constraintStart_toStartOf="@+id/imageButtonM3"
+      app:layout_constraintTop_toBottomOf="@+id/imageButtonM3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

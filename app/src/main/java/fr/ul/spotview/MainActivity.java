@@ -1,20 +1,38 @@
 package fr.ul.spotview;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.ArrayList;
+
+import fr.ul.spotview.donnees.Modele;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    //Launcher de la page de Gestion et la page de Selection d'un modèle
+    private ActivityResultLauncher<Intent> launcherGM, launcherSM;
+
+    //Données lors de l'ouverture de l'application
+    private ArrayList<Modele> listeModele = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +45,76 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Récupération de la liste de modèle si l'intent est non vide
+        if(getIntent().getExtras() != null){
+            Bundle extras = getIntent().getExtras();
+            this.listeModele = (ArrayList<Modele>) extras.get("list");
+            int i = 0;
+            while(i < this.listeModele.size() && i < 3){
+                Modele m = this.listeModele.get(i);
+                if(i == 0){
+                    ImageButton ib = findViewById(R.id.imageButtonM1);
+                    ib.setImageURI(Uri.parse(m.getImagePath()));
+                    ib.setOnClickListener(view -> bouton1());
+                    TextView tv = findViewById(R.id.textViewM1);
+                    tv.setText(m.getNom());
+                }
+                if(i == 1){
+                    ImageButton ib = findViewById(R.id.imageButtonM2);
+                    ib.setImageURI(Uri.parse(m.getImagePath()));
+                    ib.setOnClickListener(view -> bouton2());
+                    TextView tv = findViewById(R.id.textViewM2);
+                    tv.setText(m.getNom());
+                }
+                if(i == 2){
+                    ImageButton ib = findViewById(R.id.imageButtonM3);
+                    ib.setImageURI(Uri.parse(m.getImagePath()));
+                    ib.setOnClickListener(view -> bouton3());
+                    TextView tv = findViewById(R.id.textViewM3);
+                    tv.setText(m.getNom());
+                }
+                i++;
+            }
+        }
 
-        ImageButton btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(this);
+        //Gestion des différents objets sur le layout
+        findViewById(R.id.btnBack).setVisibility(View.INVISIBLE);
+        
+        //Mise en place des écouteurs :
+        findViewById(R.id.imageButtonCreate).setOnClickListener(this);
+        findViewById(R.id.ac_chargerB).setOnClickListener(this);
+
+        //Mise en place des Launcher
+
     }
+
+    /**
+     * Fonctions qui sélectionne directement le bon modèle de la page d'accueil
+     */
+    private void bouton1() {
+        Intent intentSM = new Intent(this, SelectionModele.class);
+        intentSM.putExtra("list", this.listeModele);
+        intentSM.putExtra("modele", this.listeModele.get(0));
+        intentSM.putExtra("pos", 0);
+        startActivity(intentSM);
+    }
+
+    private void bouton2() {
+        Intent intentSM = new Intent(this, SelectionModele.class);
+        intentSM.putExtra("list", this.listeModele);
+        intentSM.putExtra("modele", this.listeModele.get(1));
+        intentSM.putExtra("pos", 1);
+        startActivity(intentSM);
+    }
+
+    private void bouton3() {
+        Intent intentSM = new Intent(this, SelectionModele.class);
+        intentSM.putExtra("list", this.listeModele);
+        intentSM.putExtra("modele", this.listeModele.get(2));
+        intentSM.putExtra("pos", 2);
+        startActivity(intentSM);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,8 +133,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btnBack){
-
+        if(v.getId() == R.id.ac_chargerB){
+            Intent intentSM = new Intent(this, SelectionModele.class);
+            intentSM.putExtra("list", this.listeModele);
+            startActivity(intentSM);
+        }
+        if(v.getId() == R.id.imageButtonCreate){
+            Intent intentGM = new Intent(this, GestionModele.class);
+            intentGM.putExtra("list", this.listeModele);
+            startActivity(intentGM);
         }
     }
 }

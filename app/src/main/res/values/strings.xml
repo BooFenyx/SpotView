@@ -38,7 +38,7 @@
     <string name="gp_nameSelect">Nom de la pièce séléctionnée</string>
 
     <!-- Chaines de caractères de la page Gestion Photos Pièce -->
-    <string name="gpp_text">Séléctionner un point cardinal pour gérer \nl'image et les accès</string>
+    <string name="gpp_text">Séléctionner un point cardinal pour gérer \nl\'image et les accès</string>
 
     <!-- Chaines de caractères de la page Gestion Photo-->
     <string name="gph_text">Prenez une photo orienté (N, S, E, O) et\n gérer les accès</string>
