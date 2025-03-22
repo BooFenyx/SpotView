@@ -54,21 +54,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Modele m = this.listeModele.get(i);
                 if(i == 0){
                     ImageButton ib = findViewById(R.id.imageButtonM1);
-                    ib.setImageURI(Uri.parse(m.getImagePath()));
+                    if(m.getImagePath() != null){
+                        ib.setImageURI(Uri.parse(m.getImagePath()));
+                    }
                     ib.setOnClickListener(view -> bouton1());
                     TextView tv = findViewById(R.id.textViewM1);
                     tv.setText(m.getNom());
                 }
                 if(i == 1){
                     ImageButton ib = findViewById(R.id.imageButtonM2);
-                    ib.setImageURI(Uri.parse(m.getImagePath()));
+                    if(m.getImagePath() != null){
+                        ib.setImageURI(Uri.parse(m.getImagePath()));
+                    }
                     ib.setOnClickListener(view -> bouton2());
                     TextView tv = findViewById(R.id.textViewM2);
                     tv.setText(m.getNom());
                 }
                 if(i == 2){
                     ImageButton ib = findViewById(R.id.imageButtonM3);
-                    ib.setImageURI(Uri.parse(m.getImagePath()));
+                    if(m.getImagePath() != null){
+                        ib.setImageURI(Uri.parse(m.getImagePath()));
+                    }
                     ib.setOnClickListener(view -> bouton3());
                     TextView tv = findViewById(R.id.textViewM3);
                     tv.setText(m.getNom());

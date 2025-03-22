@@ -1,5 +1,7 @@
 package fr.ul.spotview.donnees;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -69,5 +71,10 @@ public class Modele implements Serializable {
      */
     public void setDescriptif(String descriptif) {
         this.descriptif = descriptif;
+    }
+
+    @NonNull
+    public String toString(){
+        return this.nom;
     }
 }

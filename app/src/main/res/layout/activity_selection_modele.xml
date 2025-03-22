@@ -98,5 +98,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sm_text"
-        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+        app:srcCompat="@drawable/invisible" />
+
+    <LinearLayout
+        android:layout_width="345dp"
+        android:layout_height="212dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/sm_importB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sm_text">
+
+        <ListView
+            android:id="@+id/sm_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

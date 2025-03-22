@@ -37,7 +37,7 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
     private int pos = -1;        //La positon du modèle
     private Class activiteRetour = null;    //La classe de l'ancienne activité
 
-    private Uri uriImage;       //L'uri de l'image pour le sauvegarder dans le modèle
+    private Uri uriImage = null;       //L'uri de l'image pour le sauvegarder dans le modèle
     private ImageView imageM;   //L'image du modèle de l'activité
     private TextView gm_desc;   //La description du modèle
     private TextView gm_name;   //Le nom du modèle
@@ -73,10 +73,12 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
         if(extras.get("modele") !=null){
             this.modeleDejaChargeRetour = (Modele) extras.get("modele");
             this.pos = (int) extras.get("pos");
-            imageM.setImageURI(Uri.parse(modeleDejaChargeRetour.getImagePath()));
+            if(modeleDejaChargeRetour.getImagePath() != null){
+                imageM.setImageURI(Uri.parse(modeleDejaChargeRetour.getImagePath()));
+                uriImage = Uri.parse(modeleDejaChargeRetour.getImagePath());
+            }
             gm_desc.setText(modeleDejaChargeRetour.getDescriptif());
             gm_name.setText(modeleDejaChargeRetour.getNom());
-            uriImage = Uri.parse(modeleDejaChargeRetour.getImagePath());
         }
 
         //Gestion des launchers
@@ -118,14 +120,20 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
             imageLauncher.launch(intent);
         }
         if(v.getId() == R.id.gm_saveB){
+            String uri;
+            if(uriImage != null){
+                uri = uriImage.toString();
+            } else{
+                uri = null;
+            }
             TextView tvN = findViewById(R.id.gm_nameText);
             TextView tvD = findViewById(R.id.gm_descText);
             String nom = tvN.getText().toString();
             String desc = tvD.getText().toString();
             if(pos == -1){
-                this.listeModele.add(new Modele(nom, uriImage.toString(), desc));
+                this.listeModele.add(new Modele(nom, uri, desc));
             } else{
-                this.listeModele.set(pos, new Modele(nom, uriImage.toString(), desc));
+                this.listeModele.set(pos, new Modele(nom, uri, desc));
             }
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("list", this.listeModele);

@@ -5,9 +5,9 @@
     <string name="ac_charger">Charger un modèle</string>
     <string name="ac_text">Bienvenue sur l\'application SpotView \n(mieux que StreetView)</string>
     <string name="ac_creer">Créer un modèle</string>
-    <string name="ac_nm1">Non modèle n°1</string>
-    <string name="ac_nm2">Non modèle n°2</string>
-    <string name="ac_nm3">Non modèle n°3</string>
+    <string name="ac_nm1">Nom modèle n°1</string>
+    <string name="ac_nm2">Nom modèle n°2</string>
+    <string name="ac_nm3">Nom modèle n°3</string>
 
     <!-- Chaines de caractères de la page Séléction Modèle -->
     <string name="sm_text">Choisissez un modèle dans la liste pour \nle visualiser, ou le modifier</string>
@@ -49,5 +49,9 @@
     <string name="gph_continue">Continuer</string>
     <string name="gph_add">Ajouter</string>
     <string name="gph_confirm">Confirmer</string>
+
+    <!-- Chaines de caractères de lu Popup Suppression SM-->
+    <string name="popup_sm_cancel">Annuler</string>
+    <string name="popup_sm_confirm">Confirmer</string>
 
 </resources>
