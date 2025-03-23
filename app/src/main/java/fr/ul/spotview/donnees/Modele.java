@@ -73,6 +73,22 @@ public class Modele implements Serializable {
         this.descriptif = descriptif;
     }
 
+    /**
+     * Fonction retournant la liste des pieces
+     * @return La liste des pieces du modèle
+     */
+    public ArrayList<Piece> getListePiece(){
+        return this.listePiece;
+    }
+
+    /**
+     * Fonction modifiant la liste de pièces
+     * @param p La liste
+     */
+    public void setListePiece(ArrayList<Piece> p){
+        this.listePiece = p;
+    }
+
     @NonNull
     public String toString(){
         return this.nom;

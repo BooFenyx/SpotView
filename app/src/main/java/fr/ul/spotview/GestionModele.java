@@ -63,6 +63,7 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.btnBack).setOnClickListener(this);
         findViewById(R.id.gm_modifB).setOnClickListener(this);
         findViewById(R.id.gm_saveB).setOnClickListener(this);
+        findViewById(R.id.gm_gestB).setOnClickListener(this);
 
         //Récupération de la liste de modèle
         Bundle extras = getIntent().getExtras();
@@ -120,24 +121,39 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
             imageLauncher.launch(intent);
         }
         if(v.getId() == R.id.gm_saveB){
-            String uri;
-            if(uriImage != null){
-                uri = uriImage.toString();
-            } else{
-                uri = null;
-            }
-            TextView tvN = findViewById(R.id.gm_nameText);
-            TextView tvD = findViewById(R.id.gm_descText);
-            String nom = tvN.getText().toString();
-            String desc = tvD.getText().toString();
-            if(pos == -1){
-                this.listeModele.add(new Modele(nom, uri, desc));
-            } else{
-                this.listeModele.set(pos, new Modele(nom, uri, desc));
-            }
+            saveAndPutInList();
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("list", this.listeModele);
             startActivity(intent);
+        }
+        if(v.getId() == R.id.gm_gestB){
+            saveAndPutInList();
+            Intent intentGP = new Intent(this, GestionPieces.class);
+            intentGP.putExtra("list", this.listeModele);
+            intentGP.putExtra("pos", pos);
+            startActivity(intentGP);
+        }
+    }
+
+    public void saveAndPutInList(){
+        String uri;
+        if(uriImage != null){
+            uri = uriImage.toString();
+        } else{
+            uri = null;
+        }
+        TextView tvN = findViewById(R.id.gm_nameText);
+        TextView tvD = findViewById(R.id.gm_descText);
+        String nom = tvN.getText().toString();
+        String desc = tvD.getText().toString();
+        if(pos == -1){
+            this.listeModele.add(new Modele(nom, uri, desc));
+            this.pos = this.listeModele.size() - 1;
+        } else{
+            modeleDejaChargeRetour.setNom(nom);
+            modeleDejaChargeRetour.setDescriptif(desc);
+            modeleDejaChargeRetour.setImagePath(uri);
+            this.listeModele.set(pos, modeleDejaChargeRetour);
         }
     }
 }

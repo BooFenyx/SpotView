@@ -7,6 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".GestionPieces">
 
+    <TextView
+        android:id="@+id/gp_nameM"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="149dp"
+        android:layout_marginBottom="563dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="345dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/gp_createB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ListView
+            android:id="@+id/gp_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/gp_createB"
         android:layout_width="140dp"
@@ -71,4 +99,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gp_createB" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

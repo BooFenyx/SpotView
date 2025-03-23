@@ -50,8 +50,13 @@
     <string name="gph_add">Ajouter</string>
     <string name="gph_confirm">Confirmer</string>
 
-    <!-- Chaines de caractères de lu Popup Suppression SM-->
-    <string name="popup_sm_cancel">Annuler</string>
-    <string name="popup_sm_confirm">Confirmer</string>
+    <!-- Chaines de caractères du Popup Suppression-->
+    <string name="popup_cancel">Annuler</string>
+    <string name="popup_confirm">Confirmer</string>
+
+    <!-- Chaines de caractères du Popup Création GP-->
+    <string name="popup_gp_cancel">Annuler</string>
+    <string name="popup_gp_create">Créer</string>
+    <string name="popup_gp_textField">Nom de la pièce à créer</string>
 
 </resources>

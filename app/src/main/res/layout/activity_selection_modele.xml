@@ -112,7 +112,7 @@
         app:layout_constraintTop_toBottomOf="@+id/sm_text">
 
         <ListView
-            android:id="@+id/sm_list"
+            android:id="@+id/gp_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

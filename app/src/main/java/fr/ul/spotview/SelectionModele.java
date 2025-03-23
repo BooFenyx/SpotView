@@ -49,7 +49,7 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
         //Mise en place des variables utiles à la page:
         sm_image = findViewById(R.id.sm_image);
         sm_name = findViewById(R.id.sm_name);
-        sm_list = findViewById(R.id.sm_list);
+        sm_list = findViewById(R.id.gp_list);
 
         //Mise en place des écouteurs:
         findViewById(R.id.btnBack).setOnClickListener(this);
@@ -85,11 +85,11 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
 
         // Charge le layout
         dialogSuppr.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogSuppr.setContentView(R.layout.popup_sm_delete);
+        dialogSuppr.setContentView(R.layout.popup_delete);
 
         // Gérer les vues du popup
-        dialogSuppr.findViewById(R.id.popup_sm_cancel).setOnClickListener(this);
-        dialogSuppr.findViewById(R.id.popup_sm_confirm).setOnClickListener(this);
+        dialogSuppr.findViewById(R.id.popup_cancel).setOnClickListener(this);
+        dialogSuppr.findViewById(R.id.popup_confirm).setOnClickListener(this);
 
     }
 
@@ -114,7 +114,7 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
         }
         if(v.getId() == R.id.sm_supprB){
             if(mSelect != null){
-                TextView popup_sm_text = dialogSuppr.findViewById(R.id.popup_sm_text);
+                TextView popup_sm_text = dialogSuppr.findViewById(R.id.popup_text);
                 popup_sm_text.setText("Voulez vous vraiment supprimer " + mSelect.getNom() + " ?");
                 dialogSuppr.show();
             } else{
@@ -123,10 +123,10 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
         }
 
         /* Bontous du Pop-up */
-        if(v.getId() == R.id.popup_sm_cancel){
+        if(v.getId() == R.id.popup_cancel){
             dialogSuppr.dismiss();
         }
-        if(v.getId() == R.id.popup_sm_confirm){
+        if(v.getId() == R.id.popup_confirm){
             this.listeModele.remove(pos);
             deleteConfirm();
             dialogSuppr.dismiss();
