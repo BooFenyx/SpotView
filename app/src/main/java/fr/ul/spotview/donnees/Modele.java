@@ -82,6 +82,15 @@ public class Modele implements Serializable {
     }
 
     /**
+     * Fonction servant à enregistrer une pièce dans la liste, en la modifiant
+     * @param pos La position de la pièce à modifier
+     * @param p La pièce mise à jour
+     */
+    public void setPieceListePiece(int pos, Piece p){
+        this.listePiece.set(pos, p);
+    }
+
+    /**
      * Fonction modifiant la liste de pièces
      * @param p La liste
      */

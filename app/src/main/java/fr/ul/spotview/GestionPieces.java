@@ -64,6 +64,10 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         this.posM = (int) extras.get("pos");
         this.modele = this.listeModele.get(posM);
         this.listePiece = modele.getListePiece();
+        if(extras.get("piece") != null){
+            this.pSelect = (Piece) extras.get("piece");
+            setSelectPiece(this.pSelect);
+        }
 
         //Affichage du nom du modèle
         gp_nameM.setText(this.modele.getNom());
@@ -77,6 +81,7 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 pSelect = listePiece.get(position);
+                pSelect.setPosListe(position);
                 setSelectPiece(pSelect);
             }
         });
@@ -129,7 +134,11 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         }
         if(v.getId() == R.id.gp_ModifB){
             if(pSelect != null){
-                Toast.makeText(GestionPieces.this, "Pièce sélectionné", Toast.LENGTH_LONG).show();
+                Intent intentGPP = new Intent(this, GestionPhotosPiece.class);
+                intentGPP.putExtra("list", listeModele);
+                intentGPP.putExtra("pos", posM);
+                intentGPP.putExtra("piece", pSelect);
+                startActivity(intentGPP);
             } else{
                 Toast.makeText(GestionPieces.this, "Aucune pièce sélectionné", Toast.LENGTH_LONG).show();
             }
@@ -140,7 +149,7 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
             dialogSuppr.dismiss();
         }
         if(v.getId() == R.id.popup_confirm){
-            this.listePiece.remove(pSelect);
+            this.listePiece.remove(pSelect.getPosListe());
             deleteConfirm();
             dialogSuppr.dismiss();
         }
@@ -154,6 +163,8 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
             String name = popup_gp_name.getText().toString();
             this.listePiece.add(new Piece(modele, name));
             adapter.notifyDataSetChanged();
+            popup_gp_name.setText("");
+            popup_gp_name.setHint(R.string.popup_gp_textField);
             dialogCreate.dismiss();
         }
 

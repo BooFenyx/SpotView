@@ -9,6 +9,7 @@ public class Piece implements Serializable {
     private HashMap<Photo.Orientation, Photo> listePhoto;       //La liste des 4 photos de l'image de chaque cardinalité
     private Modele modele;                                      //Le modèle
     private String nom;                                         //Le nom de la pièce
+    private int posListe;                                       //Sa position dans la liste
 
     /**
      * Fonction créant une pièce du modèle associé.
@@ -43,6 +44,31 @@ public class Piece implements Serializable {
      */
     public HashMap<Photo.Orientation, Photo> getListePhoto(){
         return this.listePhoto;
+    }
+
+    /**
+     * Fonction qui permet de mettre une photo dans la liste des photos
+     * @param o L'orientation
+     * @param p La photo
+     */
+    public void putPhoto(Photo.Orientation o, Photo p){
+        this.listePhoto.put(o, p);
+    }
+
+    /**
+     * Fonction mettant en place la position dans la liste de la pièce
+     * @param pl La position dans la liste
+     */
+    public void setPosListe(int pl){
+        this.posListe = pl;
+    }
+
+    /**
+     * Fonction retournant la position dans la liste de la pièce
+     * @return La position dans la liste
+     */
+    public int getPosListe(){
+        return posListe;
     }
 
     public String toString(){
