@@ -1,11 +1,19 @@
 package fr.ul.spotview;
 
+import android.Manifest;
+
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -13,12 +21,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.content.FileProvider;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import fr.ul.spotview.donnees.Modele;
 import fr.ul.spotview.donnees.Photo;
@@ -31,6 +48,11 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
     private Modele modele;              //Le modèle
     private int posM;                   //La position du modèle
     private Piece pSelect;              //La pièce
+    private ActivityResultLauncher<Intent> launcher;
+    private Uri uriImage;
+    private ImageView gph_image;
+    private File imageFile;
+
 
     /* Gestion de la bousolle */
     private ImageView gpp_boussole;
@@ -56,9 +78,11 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         });
 
         //Gestion des variables utiles
+        gph_image = findViewById(R.id.gph_image);
 
         //Gestion des écouteurs
         findViewById(R.id.btnBack).setOnClickListener(this);
+        findViewById(R.id.gph_takeB).setOnClickListener(this);
 
 
         //Récupération de la liste de modèle et de la position
@@ -82,11 +106,23 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         }
 
-        if (accelerometer != null)
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-        if (magnetometer != null)
-            sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Enregistrer les écouteurs des capteurs
+        if(accelerometer != null)
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        if(magnetometer != null)
+            sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Désenregistrer les écouteurs pour économiser la batterie
+        sensorManager.unregisterListener(this);
     }
 
     @Override
@@ -98,6 +134,13 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             intentGPP.putExtra("pos", this.posM);
             intentGPP.putExtra("piece", this.pSelect);
             startActivity(intentGPP);
+        }
+        if(v.getId() == R.id.gph_takeB){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+            }
         }
     }
 
@@ -165,5 +208,68 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             output[i] = output[i] + ALPHA * (input[i] - output[i]);
         }
         return output;
+    }
+
+    private void checkPermissionsAndOpenCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            openCamera();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+        }
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            try {
+                imageFile = createImageFile();
+                if (imageFile != null) {
+                    uriImage = FileProvider.getUriForFile(this, "com.example.cameracapture.provider", imageFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
+                    cameraLauncher.launch(intent);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMG_" + timeStamp + ".jpg";
+
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        return new File(storageDir, imageFileName);
+    }
+
+    private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && uriImage != null) {
+                    displayImage();
+                }
+            }
+    );
+
+    private void displayImage() {
+        try {
+            ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), uriImage);
+            Bitmap bitmap = ImageDecoder.decodeBitmap(source);
+            gph_image.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openCamera();
+        }
     }
 }
