@@ -37,11 +37,12 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/imageButtonE"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonS"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gpp_text"
-        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+        app:srcCompat="@drawable/invisible" />
 
     <ImageButton
         android:id="@+id/imageButtonE"
@@ -50,11 +51,12 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/textE"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonW"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButtonN"
-        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+        app:srcCompat="@drawable/invisible" />
 
     <ImageButton
         android:id="@+id/imageButtonW"
@@ -63,11 +65,12 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="30dp"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/textW"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButtonE"
         app:layout_constraintTop_toBottomOf="@+id/imageButtonS"
-        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+        app:srcCompat="@drawable/invisible" />
 
     <ImageButton
         android:id="@+id/imageButtonS"
@@ -77,11 +80,12 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="25dp"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/imageButtonW"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButtonN"
         app:layout_constraintTop_toBottomOf="@+id/gpp_text"
-        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+        app:srcCompat="@drawable/invisible" />
 
     <TextView
         android:id="@+id/textN"

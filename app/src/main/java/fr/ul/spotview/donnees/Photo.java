@@ -1,8 +1,9 @@
 package fr.ul.spotview.donnees;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Photo {
+public class Photo implements Serializable {
 
     public enum Orientation {
         NORD,

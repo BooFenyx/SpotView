@@ -1,6 +1,7 @@
 package fr.ul.spotview;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.ul.spotview.donnees.Modele;
 import fr.ul.spotview.donnees.Photo;
@@ -55,6 +57,8 @@ public class GestionPhotosPiece extends AppCompatActivity implements View.OnClic
         this.modele = this.listeModele.get(posM);
         this.pSelect = (Piece) extras.get("piece");
         this.gpp_textP.setText("Pièce séléctionné: " + pSelect.toString());
+
+        setPhotoOrientation();
     }
 
     @Override
@@ -99,6 +103,30 @@ public class GestionPhotosPiece extends AppCompatActivity implements View.OnClic
             intentGP.putExtra("pos", this.posM);
             intentGP.putExtra("piece", this.pSelect);
             startActivity(intentGP);
+        }
+    }
+
+    private void setPhotoOrientation(){
+        HashMap<Photo.Orientation, Photo> listePhoto = pSelect.getListePhoto();
+        if(listePhoto.get(Photo.Orientation.NORD) != null) {
+            Photo p = listePhoto.get(Photo.Orientation.NORD);
+            ImageButton ibn = findViewById(R.id.imageButtonN);
+            ibn.setImageURI(Uri.parse(p.getCheminImage()));
+        }
+        if(listePhoto.get(Photo.Orientation.SUD) != null) {
+            Photo p = listePhoto.get(Photo.Orientation.SUD);
+            ImageButton ibn = findViewById(R.id.imageButtonS);
+            ibn.setImageURI(Uri.parse(p.getCheminImage()));
+        }
+        if(listePhoto.get(Photo.Orientation.EST) != null) {
+            Photo p = listePhoto.get(Photo.Orientation.EST);
+            ImageButton ibn = findViewById(R.id.imageButtonE);
+            ibn.setImageURI(Uri.parse(p.getCheminImage()));
+        }
+        if(listePhoto.get(Photo.Orientation.OUEST) != null) {
+            Photo p = listePhoto.get(Photo.Orientation.OUEST);
+            ImageButton ibn = findViewById(R.id.imageButtonW);
+            ibn.setImageURI(Uri.parse(p.getCheminImage()));
         }
     }
 }

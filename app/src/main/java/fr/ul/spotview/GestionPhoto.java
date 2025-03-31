@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -25,6 +26,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -37,6 +40,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import fr.ul.spotview.DrawingView;
+import fr.ul.spotview.donnees.Acces;
 import fr.ul.spotview.donnees.Modele;
 import fr.ul.spotview.donnees.Photo;
 import fr.ul.spotview.donnees.Piece;
@@ -52,7 +57,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
     private Uri uriImage;
     private ImageView gph_image;
     private File imageFile;
-
+    private Photo photoEnCours;
 
     /* Gestion de la bousolle */
     private ImageView gpp_boussole;
@@ -65,6 +70,10 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
     private float[] geomagnetic;
     private float currentDegree = 0f;
     private final float ALPHA = 0.2f; // Coefficient de lissage
+
+    //Gestion des accès
+    private ArrayList<Acces> listeAcces = new ArrayList<>();
+    private DrawingView drawingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +88,12 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
 
         //Gestion des variables utiles
         gph_image = findViewById(R.id.gph_image);
+        drawingView = findViewById(R.id.drawingView);
 
         //Gestion des écouteurs
         findViewById(R.id.btnBack).setOnClickListener(this);
         findViewById(R.id.gph_takeB).setOnClickListener(this);
+        findViewById(R.id.gph_addAcc).setOnClickListener(this);
 
 
         //Récupération de la liste de modèle et de la position
@@ -93,6 +104,11 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         this.pSelect = (Piece) extras.get("piece");
         this.ori = (Photo.Orientation) extras.get("ori");
         setTextOri(ori);
+
+        if(pSelect.getListePhoto().get(ori) != null){
+            photoEnCours = pSelect.getListePhoto().get(ori);
+        }
+        setImage();
 
         /* Gestion de la boussole */
 
@@ -132,6 +148,11 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             this.listeModele.set(this.posM, this.modele);
             intentGPP.putExtra("list", this.listeModele);
             intentGPP.putExtra("pos", this.posM);
+
+            //Ajout de la liste d'accès dans la photo avant de la mettre dans la pièce
+
+            pSelect.putPhoto(ori, photoEnCours);
+
             intentGPP.putExtra("piece", this.pSelect);
             startActivity(intentGPP);
         }
@@ -141,6 +162,9 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             } else {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
             }
+        }
+        if(v.getId() == R.id.gph_addAcc){
+            activerModeDessin();
         }
     }
 
@@ -159,6 +183,12 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             case OUEST:
                 textViewOri.setText("W");
                 break;
+        }
+    }
+
+    private void setImage(){
+        if(photoEnCours != null){
+            gph_image.setImageURI(Uri.parse(photoEnCours.getCheminImage()));
         }
     }
 
@@ -210,14 +240,6 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         return output;
     }
 
-    private void checkPermissionsAndOpenCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            openCamera();
-        } else {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
-        }
-    }
-
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -260,6 +282,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), uriImage);
             Bitmap bitmap = ImageDecoder.decodeBitmap(source);
             gph_image.setImageBitmap(bitmap);
+            photoEnCours = new Photo(pSelect, ori, uriImage.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -271,5 +294,19 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openCamera();
         }
+    }
+
+    private void activerModeDessin() {
+        // Active le mode dessin en utilisant votre méthode setDraw(boolean)
+        drawingView.setDraw(true);
+        drawingView.setOnAccesDrawnListener(new DrawingView.OnAccesDrawnListener() {
+            @Override
+            public void onAccesDrawn(Acces acces) {
+                listeAcces.add(acces);
+                drawingView.setAccesList(listeAcces);
+                // Désactive le mode dessin après le dessin
+                drawingView.setDraw(false);
+            }
+        });
     }
 }

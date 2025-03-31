@@ -18,6 +18,11 @@ public class Piece implements Serializable {
      */
     public Piece(Modele modele, String nom){
         this.listePhoto = new HashMap<>();
+        //Mise en place de la liste
+        this.listePhoto.put(Photo.Orientation.NORD, null);
+        this.listePhoto.put(Photo.Orientation.SUD, null);
+        this.listePhoto.put(Photo.Orientation.EST, null);
+        this.listePhoto.put(Photo.Orientation.OUEST, null);
         this.modele = modele;
         this.nom = nom;
     }

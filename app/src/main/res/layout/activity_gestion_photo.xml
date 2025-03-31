@@ -10,18 +10,18 @@
     <!-- PreviewView pour afficher le flux de la caméra -->
 
     <Button
-        android:id="@+id/gp_ModifB2"
+        android:id="@+id/gph_addAcc"
         android:layout_width="140dp"
         android:layout_height="55dp"
         android:layout_marginStart="30dp"
         android:layout_marginBottom="28dp"
         android:text="@string/gph_addAcc"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/gp_supprB2"
+        app:layout_constraintEnd_toStartOf="@+id/gph_supprAcc"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/gp_supprB2"
+        android:id="@+id/gph_supprAcc"
         android:layout_width="140dp"
         android:layout_height="55dp"
         android:layout_marginStart="71dp"
@@ -31,7 +31,7 @@
         android:text="@string/gph_supprAcc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/gp_ModifB2"
+        app:layout_constraintStart_toEndOf="@+id/gph_addAcc"
         app:layout_constraintTop_toBottomOf="@+id/gph_takeB" />
 
     <Button
@@ -40,7 +40,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="10dp"
         android:text="@string/gph_take"
-        app:layout_constraintBottom_toTopOf="@+id/gp_ModifB2"
+        app:layout_constraintBottom_toTopOf="@+id/gph_addAcc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
@@ -59,8 +59,8 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/gp_supprB2"
-        app:layout_constraintStart_toEndOf="@+id/gp_ModifB2"
+        app:layout_constraintEnd_toStartOf="@+id/gph_supprAcc"
+        app:layout_constraintStart_toEndOf="@+id/gph_addAcc"
         app:layout_constraintTop_toBottomOf="@+id/gph_takeB" />
 
     <ImageView
@@ -72,16 +72,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/compass_white" />
 
-    <ImageView
-        android:id="@+id/gph_image"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="446dp"
         android:layout_marginTop="64dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@+id/gpp_boussole"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/invisible" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/gph_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/invisible" />
+
+            <fr.ul.spotview.DrawingView
+                android:id="@+id/drawingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
