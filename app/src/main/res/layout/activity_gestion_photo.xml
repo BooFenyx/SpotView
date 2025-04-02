@@ -64,20 +64,20 @@
         app:layout_constraintTop_toBottomOf="@+id/gph_takeB" />
 
     <ImageView
-        android:id="@+id/gpp_boussole"
+        android:id="@+id/gph_boussole"
         android:layout_width="75dp"
         android:layout_height="75dp"
         app:layout_constraintBottom_toTopOf="@+id/gph_takeB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
         app:srcCompat="@drawable/compass_white" />
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="wrap_content"
         android:layout_height="446dp"
         android:layout_marginTop="64dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/gpp_boussole"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -99,5 +99,17 @@
         </FrameLayout>
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/gph_textAcces"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/gph_textAcces"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/gph_takeB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

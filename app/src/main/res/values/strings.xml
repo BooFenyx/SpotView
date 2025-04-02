@@ -49,6 +49,7 @@
     <string name="gph_continue">Continuer</string>
     <string name="gph_add">Ajouter</string>
     <string name="gph_confirm">Confirmer</string>
+    <string name="gph_textAcces">Ajout d\'accès en cours</string>
 
     <!-- Chaines de caractères du Popup Suppression-->
     <string name="popup_cancel">Annuler</string>

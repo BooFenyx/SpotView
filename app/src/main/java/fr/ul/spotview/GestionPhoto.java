@@ -2,11 +2,14 @@ package fr.ul.spotview;
 
 import android.Manifest;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,8 +21,12 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -53,14 +60,16 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
     private Modele modele;              //Le modèle
     private int posM;                   //La position du modèle
     private Piece pSelect;              //La pièce
+    private Acces accesEnCours;         //L'accès en train d'être créé
     private ActivityResultLauncher<Intent> launcher;
     private Uri uriImage;
     private ImageView gph_image;
     private File imageFile;
     private Photo photoEnCours;
+    private TextView gph_textAcces;
 
     /* Gestion de la bousolle */
-    private ImageView gpp_boussole;
+    private ImageView gph_boussole;
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private Sensor magnetometer;
@@ -73,7 +82,15 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
 
     //Gestion des accès
     private ArrayList<Acces> listeAcces = new ArrayList<>();
+    private Acces aSelect = null;
+    private Piece pSelectAcces;
     private DrawingView drawingView;
+    private ArrayAdapter<Acces> adapter;   //Permet d'afficher les accès dans la listeView
+    private ArrayAdapter<Piece> adapterChoose; //Permet d'afficher les accès dans la listeView
+    private Dialog dialogSuppr;     //Dialog gérant le pop-up de suppression
+    private ListView lv;
+    private Dialog dialogChoose;    //Dialog gérant le pop up de choix de pièce de destination
+    private ListView lvChoose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +104,8 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         });
 
         //Gestion des variables utiles
+        gph_textAcces = findViewById(R.id.gph_textAcces);
+        gph_textAcces.setVisibility(View.GONE);
         gph_image = findViewById(R.id.gph_image);
         drawingView = findViewById(R.id.drawingView);
 
@@ -94,6 +113,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnBack).setOnClickListener(this);
         findViewById(R.id.gph_takeB).setOnClickListener(this);
         findViewById(R.id.gph_addAcc).setOnClickListener(this);
+        findViewById(R.id.gph_supprAcc).setOnClickListener(this);
 
 
         //Récupération de la liste de modèle et de la position
@@ -107,12 +127,18 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
 
         if(pSelect.getListePhoto().get(ori) != null){
             photoEnCours = pSelect.getListePhoto().get(ori);
+            if(!photoEnCours.getListeAcces().isEmpty()){
+                listeAcces = photoEnCours.getListeAcces();
+                drawingView.setAccesList(listeAcces);
+            }
+        } else{
+            photoEnCours = null;
         }
         setImage();
 
         /* Gestion de la boussole */
 
-        this.gpp_boussole = findViewById(R.id.gpp_boussole);
+        this.gph_boussole = findViewById(R.id.gph_boussole);
 
         // Obtenir le SensorManager et les capteurs
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -122,6 +148,57 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         }
 
+        //Remplissage de la liste des pièces
+        adapter = new ArrayAdapter<>(this, R.layout.list_item_dark, listeAcces);
+
+        //Gestion des Pop-up: Supprimer
+        dialogSuppr = new Dialog(this);
+
+        // Charge le layout    private int posAcces = -1;
+        dialogSuppr.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogSuppr.setContentView(R.layout.popup_delete_acces);
+
+        // Gérer les vues du popup
+        dialogSuppr.findViewById(R.id.popup_cancel).setOnClickListener(this);
+        dialogSuppr.findViewById(R.id.popup_confirm).setOnClickListener(this);
+
+        this.lv = dialogSuppr.findViewById(R.id.popup_list);
+        this.lv.setAdapter(adapter);
+
+        this.lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                aSelect = listeAcces.get(position);
+                TextView tv = dialogSuppr.findViewById(R.id.popup_text);
+                tv.setText("Voulez vous supprimer un accès menant à " + aSelect.toString() + " ?");
+            }
+        });
+
+        //Pop-up Choix
+        adapterChoose = new ArrayAdapter<>(this, R.layout.list_item_dark, modele.getListePiece());
+
+        //Gestion des Pop-up: Supprimer
+        dialogChoose = new Dialog(this);
+
+        // Charge le layout
+        dialogChoose.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogChoose.setContentView(R.layout.popup_choose_acces);
+
+        // Gérer les vues du popup
+        dialogChoose.findViewById(R.id.popup_c_cancel).setOnClickListener(this);
+        dialogChoose.findViewById(R.id.popup_c_confirm).setOnClickListener(this);
+
+        this.lvChoose = dialogChoose.findViewById(R.id.popup_c_list);
+        this.lvChoose.setAdapter(adapterChoose);
+
+        this.lvChoose.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                pSelectAcces = modele.getListePiece().get(position);
+                TextView tv = dialogChoose.findViewById(R.id.popup_c_text);
+                tv.setText("Pièce vers laquelle l'accès mène : " + pSelectAcces);
+            }
+        });
     }
 
     @Override
@@ -150,7 +227,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             intentGPP.putExtra("pos", this.posM);
 
             //Ajout de la liste d'accès dans la photo avant de la mettre dans la pièce
-
+            photoEnCours.setListeAcces(listeAcces);
             pSelect.putPhoto(ori, photoEnCours);
 
             intentGPP.putExtra("piece", this.pSelect);
@@ -164,7 +241,57 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             }
         }
         if(v.getId() == R.id.gph_addAcc){
-            activerModeDessin();
+            if(this.photoEnCours != null){
+                gph_boussole.setVisibility(View.GONE);
+                gph_boussole.setImageResource(R.drawable.invisible);
+                gph_textAcces.setVisibility(View.VISIBLE);
+                activerModeDessin();
+            } else{
+                Toast.makeText(this, "Vous devez prendre une photo avant", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if(v.getId() == R.id.gph_supprAcc){
+            if(!listeAcces.isEmpty()){
+                dialogSuppr.show();
+            } else{
+                Toast.makeText(this, "Aucun Accès dessiné", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        /* Bontous du Pop-up */
+        if(v.getId() == R.id.popup_cancel){
+            dialogSuppr.dismiss();
+        }
+        if(v.getId() == R.id.popup_confirm){
+            if(aSelect != null){
+                this.listeAcces.remove(aSelect);
+                drawingView.setAccesList(listeAcces);
+                deleteConfirm();
+                dialogSuppr.dismiss();
+                TextView tv = dialogSuppr.findViewById(R.id.popup_text);
+                tv.setText("");
+                adapter.notifyDataSetChanged();
+            } else{
+                Toast.makeText(this, "Aucun accès séléctionné", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        /* Boutons du pop_up */
+        if(v.getId() == R.id.popup_c_cancel){
+            accesEnCours = null;
+            dialogChoose.dismiss();
+        }
+        if(v.getId() == R.id.popup_c_confirm){
+            if(pSelectAcces != null){
+                dialogChoose.dismiss();
+                setPieceAcces();
+                TextView tv = dialogChoose.findViewById(R.id.popup_c_text);
+                tv.setText("");
+            }
+            else{
+                Toast.makeText(this, "Veuillez choisir une pièce", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -220,7 +347,9 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
                         Animation.RELATIVE_TO_SELF, 0.5f);
                 ra.setDuration(250);
                 ra.setFillAfter(true);
-                gpp_boussole.startAnimation(ra);
+                if(gph_boussole.getVisibility() != View.GONE){
+                    gph_boussole.startAnimation(ra);
+                }
                 currentDegree = -azimuthInDegrees;
             }
         }
@@ -302,11 +431,28 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         drawingView.setOnAccesDrawnListener(new DrawingView.OnAccesDrawnListener() {
             @Override
             public void onAccesDrawn(Acces acces) {
-                listeAcces.add(acces);
-                drawingView.setAccesList(listeAcces);
+                accesEnCours = acces;
                 // Désactive le mode dessin après le dessin
                 drawingView.setDraw(false);
+                gph_textAcces.setVisibility(View.GONE);
+                gph_boussole.setVisibility(View.VISIBLE);
+                gph_boussole.setImageResource(R.drawable.compass_white);
+                dialogChoose.show();
             }
         });
+    }
+
+    private void setPieceAcces(){
+        accesEnCours.setDestination(pSelectAcces);
+        listeAcces.add(accesEnCours);
+        drawingView.setAccesList(listeAcces);
+    }
+
+    public void deleteConfirm(){
+        //On mets à jour la listView
+        this.adapter.notifyDataSetChanged();
+
+        //On reset
+        this.aSelect = null;
     }
 }

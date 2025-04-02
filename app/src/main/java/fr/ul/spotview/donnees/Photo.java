@@ -45,4 +45,20 @@ public class Photo implements Serializable {
     public Orientation getOrientation() {
         return orientation;
     }
+
+    /**
+     * Fonction qui modifie la liste d'accès
+     * @param l
+     */
+    public void setListeAcces(ArrayList<Acces> l){
+        this.listeAcces = l;
+    }
+
+    /**
+     * Fonction retournant la liste d'accès
+     * @return
+     */
+    public ArrayList<Acces> getListeAcces(){
+        return listeAcces;
+    }
 }

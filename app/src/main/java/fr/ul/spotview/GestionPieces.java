@@ -64,6 +64,7 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         this.posM = (int) extras.get("pos");
         this.modele = this.listeModele.get(posM);
         this.listePiece = modele.getListePiece();
+
         if(extras.get("piece") != null){
             this.pSelect = (Piece) extras.get("piece");
             setSelectPiece(this.pSelect);
@@ -134,6 +135,7 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         }
         if(v.getId() == R.id.gp_ModifB){
             if(pSelect != null){
+                modele.setListePiece(this.listePiece);
                 Intent intentGPP = new Intent(this, GestionPhotosPiece.class);
                 intentGPP.putExtra("list", listeModele);
                 intentGPP.putExtra("pos", posM);

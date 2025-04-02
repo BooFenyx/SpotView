@@ -46,6 +46,18 @@ public class Acces implements Serializable {
     }
 
     /**
+     * Fonction qui mets en place la pièce de destination
+     * @param destination
+     */
+    public void setDestination(Piece destination){
+        this.destination = destination;
+    }
+
+    public Piece getDestination(){
+        return this.destination;
+    }
+
+    /**
      * Fonction retournant la largeur
      * @return La largeur
      */
@@ -59,5 +71,9 @@ public class Acces implements Serializable {
      */
     public float getHauteur() {
         return hauteur;
+    }
+
+    public String toString(){
+        return this.destination.toString();
     }
 }
