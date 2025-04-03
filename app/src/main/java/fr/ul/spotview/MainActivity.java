@@ -99,32 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.imageButtonCreate).setOnClickListener(this);
         findViewById(R.id.ac_chargerB).setOnClickListener(this);
 
-        // Récupération du bouton menu
-        btnMenu = findViewById(R.id.btnMenu);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Création et affichage du PopupMenu
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnMenu);
-                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_item1){
-                            Toast.makeText(MainActivity.this, "Impossible d'accédez au dossier de sauvegarde", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if(item.getItemId() == R.id.action_item2){
-                            Toast.makeText(MainActivity.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else{
-                            return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
-        });
-
         //Verification Systeme fichier
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -158,22 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentSM.putExtra("modele", this.listeModele.get(2));
         intentSM.putExtra("pos", 2);
         startActivity(intentSM);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.app_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import fr.ul.spotview.donnees.Acces;
 import fr.ul.spotview.donnees.Modele;
 import fr.ul.spotview.donnees.Photo;
 import fr.ul.spotview.donnees.Piece;
@@ -135,50 +137,6 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
         e.setOnClickListener(this);
         w = dialogVisu.findViewById(R.id.popup_v_W);
         w.setOnClickListener(this);
-
-        //Gestion de la liste du popup
-        if(mSelect != null){
-            adapterVisu = new ArrayAdapter<>(this, R.layout.list_item_dark, mSelect.getListePiece());
-
-            lvVisu = dialogVisu.findViewById(R.id.popup_v_list);
-            lvVisu.setAdapter(adapterVisu);
-
-            lvVisu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    pSelect = mSelect.getListePiece().get(position);
-                    TextView tv = dialogVisu.findViewById(R.id.popup_v_text);
-                    tv.setText("La visualisation commencera dans : " + pSelect);
-                }
-            });
-        }
-
-        // Récupération du bouton menu
-        btnMenu = findViewById(R.id.btnMenu);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Création et affichage du PopupMenu
-                PopupMenu popupMenu = new PopupMenu(SelectionModele.this, btnMenu);
-                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_item1){
-                            Toast.makeText(SelectionModele.this, "Item 1 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if(item.getItemId() == R.id.action_item2){
-                            Toast.makeText(SelectionModele.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else{
-                            return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
-        });
-
     }
 
     @Override
@@ -211,6 +169,20 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
         }
         if(v.getId() == R.id.sm_visuB){
             if(mSelect != null){
+                //Gestion du pop-up
+                adapterVisu = new ArrayAdapter<>(this, R.layout.list_item_dark, mSelect.getListePiece());
+
+                lvVisu = dialogVisu.findViewById(R.id.popup_v_list);
+                lvVisu.setAdapter(adapterVisu);
+
+                lvVisu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        pSelect = mSelect.getListePiece().get(position);
+                        TextView tv = dialogVisu.findViewById(R.id.popup_v_text);
+                        tv.setText("La visualisation commencera dans : " + pSelect);
+                    }
+                });
                 if(verifAvantVisu(mSelect)){
                     dialogVisu.show();
                 } else{
@@ -239,7 +211,19 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
             dialogVisu.dismiss();
         }
         if(v.getId() == R.id.popup_v_confirm){
-            dialogVisu.dismiss();
+            if(oriVisu != null && pSelect != null){
+                dialogVisu.dismiss();
+                Intent intentV = new Intent(this, Visualisation.class);
+                intentV.putExtra("list", this.listeModele);
+                intentV.putExtra("modele", this.mSelect);
+                intentV.putExtra("pos", pos);
+                intentV.putExtra("ori", oriVisu);
+                intentV.putExtra("pieceD", pSelect);
+                startActivity(intentV);
+            } else{
+                Toast.makeText(this, "Choississez les paramètres", Toast.LENGTH_LONG).show();
+            }
+
         }
         if(v.getId() == R.id.popup_v_N){
             if(n.getAlpha() == 1f && s.getAlpha() == 0.5f){
@@ -317,6 +301,7 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
         listeModele.add(mSelect);
         pos = listeModele.size() - 1;
         adapter.notifyDataSetChanged();
+        setModeleSelect(mSelect);
     }
 
     public void deleteConfirm(){
@@ -336,7 +321,23 @@ public class SelectionModele extends AppCompatActivity implements View.OnClickLi
      * @return Vrai si c'est bon, faux sinon
      */
     public boolean verifAvantVisu(Modele modele){
-        return false;
+        ArrayList<Piece> lp = modele.getListePiece();
+        for(Piece p: lp){
+            HashMap<Photo.Orientation, Photo> hp = p.getListePhoto();
+            boolean asAcces = false;
+            for(Photo.Orientation o: hp.keySet()){
+                if(hp.get(o) == null){
+                    return false;
+                }
+                if(!hp.get(o).getListeAcces().isEmpty()){
+                    asAcces = true;
+                }
+            }
+            if(!asAcces){
+                return false;
+            }
+        }
+        return true;
     }
 
     // Fonction pour ouvrir le gestionnaire de fichiers

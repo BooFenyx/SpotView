@@ -19,7 +19,12 @@ public class DrawingView extends View {
         void onAccesDrawn(Acces acces);
     }
 
+    public interface OnAccesClickListener {
+        void onAccesClicked(Acces acces);
+    }
+
     private OnAccesDrawnListener listener;
+    private OnAccesClickListener clickListener;
 
     // Coordonnées de départ et d'arrivée
     private float startX, startY, currentX, currentY;
@@ -66,6 +71,9 @@ public class DrawingView extends View {
     public void setOnAccesDrawnListener(OnAccesDrawnListener listener) {
         this.listener = listener;
     }
+    public void setOnAccesClickListener(OnAccesClickListener listener) {
+        this.clickListener = listener;
+    }
 
     // Active ou désactive le mode dessin
     public void setDraw(boolean b) {
@@ -99,7 +107,25 @@ public class DrawingView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         // Si le mode dessin n'est pas activé, on n'interprète pas l'événement tactile
         if (!editable) {
-            return false;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                float x = event.getX();
+                float y = event.getY();
+                // Parcourir la liste des accès pour détecter un clic dans l'un d'eux
+                for (Acces acces : accesList) {
+                    float left = acces.getX();
+                    float top = acces.getY();
+                    float right = left + acces.getLargeur();
+                    float bottom = top + acces.getHauteur();
+                    if (x >= left && x <= right && y >= top && y <= bottom) {
+                        if (clickListener != null) {
+                            clickListener.onAccesClicked(acces);
+                            // On arrête après avoir détecté un accès cliqué
+                            break;
+                        }
+                    }
+                }
+            }
+            return true;
         }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:

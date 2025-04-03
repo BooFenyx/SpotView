@@ -64,32 +64,6 @@ public class GestionPhotosPiece extends AppCompatActivity implements View.OnClic
         this.gpp_textP.setText("Pièce séléctionné: " + pSelect.toString());
 
         setPhotoOrientation();
-
-        // Récupération du bouton menu
-        btnMenu = findViewById(R.id.btnMenu);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Création et affichage du PopupMenu
-                PopupMenu popupMenu = new PopupMenu(GestionPhotosPiece.this, btnMenu);
-                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_item1){
-                            Toast.makeText(GestionPhotosPiece.this, "Item 1 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if(item.getItemId() == R.id.action_item2){
-                            Toast.makeText(GestionPhotosPiece.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else{
-                            return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
-        });
     }
 
     @Override

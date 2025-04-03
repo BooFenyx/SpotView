@@ -134,6 +134,23 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             photoEnCours = pSelect.getListePhoto().get(ori);
             if(!photoEnCours.getListeAcces().isEmpty()){
                 listeAcces = photoEnCours.getListeAcces();
+                //Vérification rapide de si la pièce de destination existe toujours.
+                ArrayList<Acces> aSuppr = new ArrayList<>();
+                boolean estLa = false;
+                for(Acces a: listeAcces){
+                    for(Piece p: modele.getListePiece()){
+                        if(p.getNom().equals(a.getDestination().getNom())){
+                            estLa = true;
+                        }
+                    }
+                    if(!estLa){
+                        aSuppr.add(a);
+                    }
+                    estLa = false;
+                }
+                for(Acces a: aSuppr){
+                    listeAcces.remove(a);
+                }
                 drawingView.setAccesList(listeAcces);
             }
         } else{
@@ -205,31 +222,6 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        // Récupération du bouton menu
-        btnMenu = findViewById(R.id.btnMenu);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Création et affichage du PopupMenu
-                PopupMenu popupMenu = new PopupMenu(GestionPhoto.this, btnMenu);
-                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_item1){
-                            Toast.makeText(GestionPhoto.this, "Item 1 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if(item.getItemId() == R.id.action_item2){
-                            Toast.makeText(GestionPhoto.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else{
-                            return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
-        });
     }
 
     @Override

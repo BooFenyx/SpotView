@@ -111,36 +111,6 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
-
-        // Récupération du bouton menu
-        btnMenu = findViewById(R.id.btnMenu);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Création et affichage du PopupMenu
-                PopupMenu popupMenu = new PopupMenu(GestionModele.this, btnMenu);
-                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_item1){
-                            if(modele != null){
-                                SingletonOpenFolder.getInstance().openFolder(GestionModele.this, modele.getNom());
-                            } else{
-                                Toast.makeText(GestionModele.this, "Aucun modèle enregistré", Toast.LENGTH_LONG).show();
-                            }
-                            return true;
-                        } else if(item.getItemId() == R.id.action_item2){
-                            Toast.makeText(GestionModele.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else{
-                            return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
-        });
     }
 
     @Override
@@ -168,11 +138,15 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
         }
         if(v.getId() == R.id.gm_saveB){
             if(!gm_name.getText().toString().isEmpty()) {
-                sauvegarderModele();
-                saveAndPutInList();
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("list", this.listeModele);
-                startActivity(intent);
+                if(verifAvantSave(modele)){
+                    sauvegarderModele();
+                    saveAndPutInList();
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("list", this.listeModele);
+                    startActivity(intent);
+                } else{
+                    Toast.makeText(this, "Modèle invalide pour la sauvegarde", Toast.LENGTH_LONG).show();
+                }
             } else{
                 Toast.makeText(this, "Veuillez choisir un nom de modèle", Toast.LENGTH_LONG).show();
             }
@@ -261,7 +235,7 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
             String json = gson.toJson(modele);
 
             File jsonFile = new File(destDir, "data.json");
-            FileWriter writer = new FileWriter(jsonFile);
+            FileWriter writer = new FileWriter(jsonFile, false);
             writer.write(json);
             writer.close();
         } catch (Exception e) {
@@ -320,5 +294,36 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
         // Utiliser FileProvider pour obtenir un URI sécurisé
         return androidx.core.content.FileProvider.getUriForFile(this,
                 getApplicationContext().getPackageName() + ".provider", folder);
+    }
+
+    /**
+     * Fonction vérifiant si le modèle est éligible à la sauvegarde
+     * @param modele Le modèle à vérifier
+     * @return Vrai si c'est bon, faux sinon
+     */
+    public boolean verifAvantSave(Modele modele){
+        if(modele == null){
+            return false;
+        }
+        ArrayList<Piece> lp = modele.getListePiece();
+        if(lp.size() < 2){
+            return false;
+        }
+        for(Piece p: lp){
+            HashMap<Photo.Orientation, Photo> hp = p.getListePhoto();
+            boolean asAcces = false;
+            for(Photo.Orientation o: hp.keySet()){
+                if(hp.get(o) == null){
+                    return false;
+                }
+                if(!hp.get(o).getListeAcces().isEmpty()){
+                    asAcces = true;
+                }
+            }
+            if(!asAcces){
+                return false;
+            }
+        }
+        return true;
     }
 }
