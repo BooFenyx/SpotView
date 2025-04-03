@@ -163,13 +163,16 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         if(v.getId() == R.id.popup_gp_confirm){
             TextView popup_gp_name = dialogCreate.findViewById(R.id.popup_gp_name);
             String name = popup_gp_name.getText().toString();
-            this.listePiece.add(new Piece(modele, name));
-            adapter.notifyDataSetChanged();
-            popup_gp_name.setText("");
-            popup_gp_name.setHint(R.string.popup_gp_textField);
-            dialogCreate.dismiss();
+            if(!name.isEmpty() && !name.equals(modele.getNom())){
+                this.listePiece.add(new Piece(modele, name));
+                adapter.notifyDataSetChanged();
+                popup_gp_name.setText("");
+                popup_gp_name.setHint(R.string.popup_gp_textField);
+                dialogCreate.dismiss();
+            } else{
+                Toast.makeText(this, "Nom de pièce incorrect", Toast.LENGTH_LONG).show();
+            }
         }
-
     }
 
     public void setSelectPiece(Piece p){

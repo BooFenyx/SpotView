@@ -12,13 +12,21 @@ public class Modele implements Serializable {
     private String imagePath;                   //L'image qui illustre le modèle
     private String descriptif;                  //Le descriptif du modèle
 
+    // Constructeur par défaut pour Gson
+    public Modele() {
+        this.listePiece = new ArrayList<>();
+        this.nom = "";
+        this.imagePath = "";
+        this.descriptif = "";
+    }
+
     /**
      * Constructeur d'un modèle
      * @param nom Le nom du modèle
      * @param image Le chemin d'accès de l'image d'illustration
      * @param descriptif Le descriptif du modèle
      */
-    public Modele(String nom, String image, String descriptif){
+    public Modele(String nom, String image, String descriptif) {
         this.listePiece = new ArrayList<>();
         this.nom = nom;
         this.imagePath = image;
@@ -82,20 +90,20 @@ public class Modele implements Serializable {
     }
 
     /**
+     * Fonction modifiant la liste de pièces
+     * @param p La liste
+     */
+    public void setListePiece(ArrayList<Piece> p){
+        this.listePiece = p;
+    }
+
+    /**
      * Fonction servant à enregistrer une pièce dans la liste, en la modifiant
      * @param pos La position de la pièce à modifier
      * @param p La pièce mise à jour
      */
     public void setPieceListePiece(int pos, Piece p){
         this.listePiece.set(pos, p);
-    }
-
-    /**
-     * Fonction modifiant la liste de pièces
-     * @param p La liste
-     */
-    public void setListePiece(ArrayList<Piece> p){
-        this.listePiece = p;
     }
 
     @NonNull

@@ -121,17 +121,25 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
             imageLauncher.launch(intent);
         }
         if(v.getId() == R.id.gm_saveB){
-            saveAndPutInList();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("list", this.listeModele);
-            startActivity(intent);
+            if(!gm_name.getText().toString().isEmpty()) {
+                saveAndPutInList();
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("list", this.listeModele);
+                startActivity(intent);
+            } else{
+                Toast.makeText(this, "Veuillez choisir un nom de modèle", Toast.LENGTH_LONG).show();
+            }
         }
         if(v.getId() == R.id.gm_gestB){
-            saveAndPutInList();
-            Intent intentGP = new Intent(this, GestionPieces.class);
-            intentGP.putExtra("list", this.listeModele);
-            intentGP.putExtra("pos", pos);
-            startActivity(intentGP);
+            if(!gm_name.getText().toString().isEmpty()){
+                saveAndPutInList();
+                Intent intentGP = new Intent(this, GestionPieces.class);
+                intentGP.putExtra("list", this.listeModele);
+                intentGP.putExtra("pos", pos);
+                startActivity(intentGP);
+            } else{
+                Toast.makeText(this, "Veuillez choisir un nom de modèle", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -11,6 +11,11 @@ public class Acces implements Serializable {
     private float largeur;          //La largeur de l'accès
     private float hauteur;         //La longueur de l'accès
 
+
+    // Constructeur par défaut pour Gson
+    public Acces() {
+    }
+
     /**
      * Constructeur de l'accès
      * @param photo La photo associé
@@ -38,6 +43,14 @@ public class Acces implements Serializable {
     }
 
     /**
+     * Fonction modifiant la position x
+     * @param x
+     */
+    public void setX(float x){
+        this.x = x;
+    }
+
+    /**
      * Fonction retournant la position Y
      * @return Y
      */
@@ -46,15 +59,11 @@ public class Acces implements Serializable {
     }
 
     /**
-     * Fonction qui mets en place la pièce de destination
-     * @param destination
+     * FOncion modifiant la position y
+     * @param y
      */
-    public void setDestination(Piece destination){
-        this.destination = destination;
-    }
-
-    public Piece getDestination(){
-        return this.destination;
+    public void setY(float y){
+        this.y = y;
     }
 
     /**
@@ -66,11 +75,59 @@ public class Acces implements Serializable {
     }
 
     /**
+     * Fonction modifiant la largeur
+     * @param largeur
+     */
+    public void setLargeur(float largeur) {
+        this.largeur = largeur;
+    }
+
+    /**
      * Fonction retournant la hauteur
      * @return La hauteur
      */
     public float getHauteur() {
         return hauteur;
+    }
+
+    /**
+     * Fonction modifiant la hauteur
+     * @param hauteur
+     */
+    public void setHauteur(float hauteur) {
+        this.hauteur = hauteur;
+    }
+
+    /**
+     * Fonction qui mets en place la pièce de destination
+     * @param destination
+     */
+    public void setDestination(Piece destination){
+        this.destination = destination;
+    }
+
+    /**
+     * Fonction retournant la pièce de destination
+     * @return La destination
+     */
+    public Piece getDestination(){
+        return this.destination;
+    }
+
+    /**
+     * Fonction retournant la photo associé à l'accès
+     * @return La photo
+     */
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    /**
+     * Fonction modifiant la photo associé à l'accès
+     * @param photo
+     */
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
     }
 
     public String toString(){

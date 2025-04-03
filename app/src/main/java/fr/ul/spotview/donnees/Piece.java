@@ -11,20 +11,44 @@ public class Piece implements Serializable {
     private String nom;                                         //Le nom de la pièce
     private int posListe;                                       //Sa position dans la liste
 
-    /**
-     * Fonction créant une pièce du modèle associé.
-     * @param modele Le modèle
-     * @param nom Le nom
-     */
-    public Piece(Modele modele, String nom){
+    // Constructeur par défaut pour Gson
+    public Piece() {
         this.listePhoto = new HashMap<>();
-        //Mise en place de la liste
+        // Initialiser les 4 cardinalités avec null
         this.listePhoto.put(Photo.Orientation.NORD, null);
         this.listePhoto.put(Photo.Orientation.SUD, null);
         this.listePhoto.put(Photo.Orientation.EST, null);
         this.listePhoto.put(Photo.Orientation.OUEST, null);
+        this.nom = "";
+        this.posListe = -1;
+        this.modele = null;
+    }
+
+    /**
+     * Constructeur créant une pièce pour le modèle associé.
+     * @param modele Le modèle
+     * @param nom Le nom de la pièce
+     */
+    public Piece(Modele modele, String nom) {
+        this();
         this.modele = modele;
         this.nom = nom;
+    }
+
+    /**
+     * Fonction retournant le modèle associé à la piece
+     * @return
+     */
+    public Modele getModele(){
+        return this.modele;
+    }
+
+    /**
+     * Fonction modifiant le modèle associé
+     * @param m
+     */
+    public void setModele(Modele m){
+        this.modele = m;
     }
 
     /**
@@ -43,12 +67,21 @@ public class Piece implements Serializable {
         this.nom = nom;
     }
 
+
     /**
      * Fonction qui retourne la liste des photos de la pièce
      * @return La liste de photos
      */
     public HashMap<Photo.Orientation, Photo> getListePhoto(){
         return this.listePhoto;
+    }
+
+    /**
+     * Fonction modifiant la liste photo
+     * @param list
+     */
+    public void setListePhoto(HashMap<Photo.Orientation, Photo> list){
+        this.listePhoto = list;
     }
 
     /**
