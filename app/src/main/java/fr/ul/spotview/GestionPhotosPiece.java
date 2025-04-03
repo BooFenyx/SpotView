@@ -3,12 +3,16 @@ package fr.ul.spotview;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,6 +32,7 @@ public class GestionPhotosPiece extends AppCompatActivity implements View.OnClic
     private Piece pSelect;   //La pièce sélectionnée
     private ImageButton imageButtonN, imageButtonS, imageButtonE, imageButtonW; //Les différentes diréctions des images de la pièce
     private TextView gpp_textP;
+    private ImageButton btnMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,32 @@ public class GestionPhotosPiece extends AppCompatActivity implements View.OnClic
         this.gpp_textP.setText("Pièce séléctionné: " + pSelect.toString());
 
         setPhotoOrientation();
+
+        // Récupération du bouton menu
+        btnMenu = findViewById(R.id.btnMenu);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Création et affichage du PopupMenu
+                PopupMenu popupMenu = new PopupMenu(GestionPhotosPiece.this, btnMenu);
+                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_item1){
+                            Toast.makeText(GestionPhotosPiece.this, "Item 1 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if(item.getItemId() == R.id.action_item2){
+                            Toast.makeText(GestionPhotosPiece.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    }
+                });
+                popupMenu.show();
+            }
+        });
     }
 
     @Override

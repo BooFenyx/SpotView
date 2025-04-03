@@ -1,13 +1,17 @@
 package fr.ul.spotview;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +20,10 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -33,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Données lors de l'ouverture de l'application
     private ArrayList<Modele> listeModele = new ArrayList<>();
+    private ImageButton btnMenu;
+    private static final int REQUEST_STORAGE_PERMISSION = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +99,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.imageButtonCreate).setOnClickListener(this);
         findViewById(R.id.ac_chargerB).setOnClickListener(this);
 
-        //Mise en place des Launcher
+        // Récupération du bouton menu
+        btnMenu = findViewById(R.id.btnMenu);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Création et affichage du PopupMenu
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnMenu);
+                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_item1){
+                            Toast.makeText(MainActivity.this, "Impossible d'accédez au dossier de sauvegarde", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if(item.getItemId() == R.id.action_item2){
+                            Toast.makeText(MainActivity.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    }
+                });
+                popupMenu.show();
+            }
+        });
 
+        //Verification Systeme fichier
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+            }
+        }
     }
 
     /**
@@ -148,6 +187,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intentGM = new Intent(this, GestionModele.class);
             intentGM.putExtra("list", this.listeModele);
             startActivity(intentGM);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission accordée", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission refusée", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

@@ -13,7 +13,6 @@ public class Photo implements Serializable {
     }
 
     private ArrayList<Acces> listeAcces;    //La liste des accès de la photo
-    private Piece piece;                    //La pièce associé à la photo
     private String cheminImage;             //Le chemin de l'image
     private Orientation orientation;        //L'orientation de l'image
 
@@ -21,19 +20,16 @@ public class Photo implements Serializable {
     public Photo() {
         this.listeAcces = new ArrayList<>();
         this.cheminImage = "";
-        this.orientation = null; // valeur par défaut
-        this.piece = null;
+        this.orientation = Orientation.NORD; // valeur par défaut
     }
 
     /**
      * Constructeur de la photo
-     * @param piece La pièce
      * @param o L'orientation
      * @param image Le chemin de l'image
      */
-    public Photo(Piece piece, Orientation o, String image) {
+    public Photo(Orientation o, String image) {
         this();
-        this.piece = piece;
         this.orientation = o;
         this.cheminImage = image;
     }
@@ -68,22 +64,6 @@ public class Photo implements Serializable {
      */
     public void setOrientation(Photo.Orientation ori){
         this.orientation = ori;
-    }
-
-    /**
-     * Fonction retournant la pièce associé à la photo
-     * @return
-     */
-    public Piece getPiece() {
-        return piece;
-    }
-
-    /**
-     * Fonction modifiant la pièce associé
-     * @param piece
-     */
-    public void setPiece(Piece piece) {
-        this.piece = piece;
     }
 
     /**

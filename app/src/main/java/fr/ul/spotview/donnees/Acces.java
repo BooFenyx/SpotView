@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class Acces implements Serializable {
 
     private Piece destination;      //La pièce de destination de l'accès
-    private Photo photo;            //La photo associé à l'accès
     private float x;                //La position X
     private float y;                //La position Y
     private float largeur;          //La largeur de l'accès
@@ -18,15 +17,13 @@ public class Acces implements Serializable {
 
     /**
      * Constructeur de l'accès
-     * @param photo La photo associé
      * @param destination La destination
      * @param x La position X
      * @param y La position Y
      * @param la La largeur
      * @param ha La hauteur
      */
-    public Acces(Photo photo, Piece destination, float x, float y, float la, float ha){
-        this.photo = photo;
+    public Acces(Piece destination, float x, float y, float la, float ha){
         this.destination = destination;
         this.x = x;
         this.y = y;
@@ -112,22 +109,6 @@ public class Acces implements Serializable {
      */
     public Piece getDestination(){
         return this.destination;
-    }
-
-    /**
-     * Fonction retournant la photo associé à l'accès
-     * @return La photo
-     */
-    public Photo getPhoto() {
-        return photo;
-    }
-
-    /**
-     * Fonction modifiant la photo associé à l'accès
-     * @param photo
-     */
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
     }
 
     public String toString(){

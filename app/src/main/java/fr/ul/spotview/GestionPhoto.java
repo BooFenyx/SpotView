@@ -18,13 +18,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -67,6 +71,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
     private File imageFile;
     private Photo photoEnCours;
     private TextView gph_textAcces;
+    private ImageButton btnMenu;
 
     /* Gestion de la bousolle */
     private ImageView gph_boussole;
@@ -199,6 +204,32 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
                 tv.setText("Pièce vers laquelle l'accès mène : " + pSelectAcces);
             }
         });
+
+        // Récupération du bouton menu
+        btnMenu = findViewById(R.id.btnMenu);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Création et affichage du PopupMenu
+                PopupMenu popupMenu = new PopupMenu(GestionPhoto.this, btnMenu);
+                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_item1){
+                            Toast.makeText(GestionPhoto.this, "Item 1 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if(item.getItemId() == R.id.action_item2){
+                            Toast.makeText(GestionPhoto.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    }
+                });
+                popupMenu.show();
+            }
+        });
     }
 
     @Override
@@ -270,7 +301,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
                 deleteConfirm();
                 dialogSuppr.dismiss();
                 TextView tv = dialogSuppr.findViewById(R.id.popup_text);
-                tv.setText("");
+                tv.setText("Veuillez choisir une pièce");
                 adapter.notifyDataSetChanged();
             } else{
                 Toast.makeText(this, "Aucun accès séléctionné", Toast.LENGTH_LONG).show();
@@ -283,14 +314,14 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             dialogChoose.dismiss();
         }
         if(v.getId() == R.id.popup_c_confirm){
-            if(pSelectAcces != null){
+            if(pSelectAcces != null && !pSelect.getNom().equals(pSelectAcces.getNom())){
                 dialogChoose.dismiss();
                 setPieceAcces();
                 TextView tv = dialogChoose.findViewById(R.id.popup_c_text);
-                tv.setText("");
+                tv.setText("Veuillez choisir une pièce");
             }
             else{
-                Toast.makeText(this, "Veuillez choisir une pièce", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Veuillez choisir une pièce correct", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -411,7 +442,8 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
             ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), uriImage);
             Bitmap bitmap = ImageDecoder.decodeBitmap(source);
             gph_image.setImageBitmap(bitmap);
-            photoEnCours = new Photo(pSelect, ori, uriImage.toString());
+            photoEnCours = new Photo(ori, uriImage.toString());
+            listeAcces.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -446,6 +478,7 @@ public class GestionPhoto extends AppCompatActivity implements View.OnClickListe
         accesEnCours.setDestination(pSelectAcces);
         listeAcces.add(accesEnCours);
         drawingView.setAccesList(listeAcces);
+        pSelectAcces = null;
     }
 
     public void deleteConfirm(){

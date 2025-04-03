@@ -7,7 +7,6 @@ import java.util.HashMap;
 public class Piece implements Serializable {
 
     private HashMap<Photo.Orientation, Photo> listePhoto;       //La liste des 4 photos de l'image de chaque cardinalité
-    private Modele modele;                                      //Le modèle
     private String nom;                                         //Le nom de la pièce
     private int posListe;                                       //Sa position dans la liste
 
@@ -21,34 +20,15 @@ public class Piece implements Serializable {
         this.listePhoto.put(Photo.Orientation.OUEST, null);
         this.nom = "";
         this.posListe = -1;
-        this.modele = null;
     }
 
     /**
      * Constructeur créant une pièce pour le modèle associé.
-     * @param modele Le modèle
      * @param nom Le nom de la pièce
      */
-    public Piece(Modele modele, String nom) {
+    public Piece(String nom) {
         this();
-        this.modele = modele;
         this.nom = nom;
-    }
-
-    /**
-     * Fonction retournant le modèle associé à la piece
-     * @return
-     */
-    public Modele getModele(){
-        return this.modele;
-    }
-
-    /**
-     * Fonction modifiant le modèle associé
-     * @param m
-     */
-    public void setModele(Modele m){
-        this.modele = m;
     }
 
     /**

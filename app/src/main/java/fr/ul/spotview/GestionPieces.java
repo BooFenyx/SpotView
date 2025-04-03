@@ -5,20 +5,25 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import fr.ul.spotview.donnees.Modele;
 import fr.ul.spotview.donnees.Piece;
@@ -36,6 +41,8 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
     private ArrayAdapter<Piece> adapter;   //Permet d'afficher les pièces dans la listeView
     private Dialog dialogCreate;     //Dialog gérant le pop-up de Création
     private Dialog dialogSuppr;     //Dialog gérant le pop-up de suppression
+    private ImageButton btnMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +115,32 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         //Gérer les vues du popup
         dialogCreate.findViewById(R.id.popup_gp_cancel).setOnClickListener(this);
         dialogCreate.findViewById(R.id.popup_gp_confirm).setOnClickListener(this);
+
+        // Récupération du bouton menu
+        btnMenu = findViewById(R.id.btnMenu);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Création et affichage du PopupMenu
+                PopupMenu popupMenu = new PopupMenu(GestionPieces.this, btnMenu);
+                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_item1){
+                            Toast.makeText(GestionPieces.this, "Item 1 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if(item.getItemId() == R.id.action_item2){
+                            Toast.makeText(GestionPieces.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    }
+                });
+                popupMenu.show();
+            }
+        });
     }
 
     @Override
@@ -163,8 +196,14 @@ public class GestionPieces extends AppCompatActivity implements View.OnClickList
         if(v.getId() == R.id.popup_gp_confirm){
             TextView popup_gp_name = dialogCreate.findViewById(R.id.popup_gp_name);
             String name = popup_gp_name.getText().toString();
-            if(!name.isEmpty() && !name.equals(modele.getNom())){
-                this.listePiece.add(new Piece(modele, name));
+            boolean sameName = false;
+            for(Piece p: listePiece){
+                if(Objects.equals(p.getNom(), name)){
+                    sameName = true;
+                }
+            }
+            if(!name.isEmpty() && !name.equals(modele.getNom()) && !sameName){
+                this.listePiece.add(new Piece(name));
                 adapter.notifyDataSetChanged();
                 popup_gp_name.setText("");
                 popup_gp_name.setHint(R.string.popup_gp_textField);

@@ -3,9 +3,13 @@ package fr.ul.spotview;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +23,22 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.io.Serializable;
-import java.net.URI;
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
 import fr.ul.spotview.donnees.Modele;
+import fr.ul.spotview.donnees.Photo;
+import fr.ul.spotview.donnees.Piece;
 
 public class GestionModele extends AppCompatActivity implements View.OnClickListener{
 
@@ -33,7 +48,7 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
     //Données lors de l'arrivée dans la page
     private ArrayList<Modele> listeModele = new ArrayList<>();
 
-    private Modele modeleDejaChargeRetour = null;       //Modèle chargé de l'ancienne activité
+    private Modele modele = null;       //Modèle chargé de l'ancienne activité
     private int pos = -1;        //La positon du modèle
     private Class activiteRetour = null;    //La classe de l'ancienne activité
 
@@ -41,6 +56,7 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
     private ImageView imageM;   //L'image du modèle de l'activité
     private TextView gm_desc;   //La description du modèle
     private TextView gm_name;   //Le nom du modèle
+    private ImageButton btnMenu;
 
 
     @Override
@@ -72,14 +88,14 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
             this.activiteRetour = (Class) extras.get("retour");
         }
         if(extras.get("modele") !=null){
-            this.modeleDejaChargeRetour = (Modele) extras.get("modele");
+            this.modele = (Modele) extras.get("modele");
             this.pos = (int) extras.get("pos");
-            if(modeleDejaChargeRetour.getImagePath() != null){
-                imageM.setImageURI(Uri.parse(modeleDejaChargeRetour.getImagePath()));
-                uriImage = Uri.parse(modeleDejaChargeRetour.getImagePath());
+            if(modele.getImagePath() != null){
+                imageM.setImageURI(Uri.parse(modele.getImagePath()));
+                uriImage = Uri.parse(modele.getImagePath());
             }
-            gm_desc.setText(modeleDejaChargeRetour.getDescriptif());
-            gm_name.setText(modeleDejaChargeRetour.getNom());
+            gm_desc.setText(modele.getDescriptif());
+            gm_name.setText(modele.getNom());
         }
 
         //Gestion des launchers
@@ -93,6 +109,36 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
                 }else{
                     Toast.makeText(GestionModele.this, "Erreur chargement image", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        // Récupération du bouton menu
+        btnMenu = findViewById(R.id.btnMenu);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Création et affichage du PopupMenu
+                PopupMenu popupMenu = new PopupMenu(GestionModele.this, btnMenu);
+                popupMenu.getMenuInflater().inflate(R.menu.app_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_item1){
+                            if(modele != null){
+                                SingletonOpenFolder.getInstance().openFolder(GestionModele.this, modele.getNom());
+                            } else{
+                                Toast.makeText(GestionModele.this, "Aucun modèle enregistré", Toast.LENGTH_LONG).show();
+                            }
+                            return true;
+                        } else if(item.getItemId() == R.id.action_item2){
+                            Toast.makeText(GestionModele.this, "Item 2 sélectionné", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else{
+                            return false;
+                        }
+                    }
+                });
+                popupMenu.show();
             }
         });
     }
@@ -109,8 +155,8 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
                 //Ici: SelectionModele
                 Intent intentAC = new Intent(this, activiteRetour);
                 intentAC.putExtra("list", this.listeModele);
-                if(modeleDejaChargeRetour != null){
-                    intentAC.putExtra("modele", modeleDejaChargeRetour);
+                if(modele != null){
+                    intentAC.putExtra("modele", modele);
                     intentAC.putExtra("pos", pos);
                 }
                 startActivity(intentAC);
@@ -122,6 +168,7 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
         }
         if(v.getId() == R.id.gm_saveB){
             if(!gm_name.getText().toString().isEmpty()) {
+                sauvegarderModele();
                 saveAndPutInList();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("list", this.listeModele);
@@ -158,10 +205,120 @@ public class GestionModele extends AppCompatActivity implements View.OnClickList
             this.listeModele.add(new Modele(nom, uri, desc));
             this.pos = this.listeModele.size() - 1;
         } else{
-            modeleDejaChargeRetour.setNom(nom);
-            modeleDejaChargeRetour.setDescriptif(desc);
-            modeleDejaChargeRetour.setImagePath(uri);
-            this.listeModele.set(pos, modeleDejaChargeRetour);
+            modele.setNom(nom);
+            modele.setDescriptif(desc);
+            modele.setImagePath(uri);
+            this.listeModele.set(pos, modele);
         }
+    }
+
+    // GESTION DE LA SAUVEGARDE DANS UN DOSSIER DEIE
+
+    // Copie un fichier image depuis une URI source dans un dossier dédié
+    private Uri copyImageToFolder(Uri sourceUri, String modelName) {
+        try {
+            // Créer un dossier nommé "modelName_date" directement dans Documents
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), modelName + "_" + currentDate);
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+
+            // Définir un nom de fichier unique pour l'image
+            String fileName = "image_" + System.currentTimeMillis() + ".jpg";
+            File destFile = new File(destDir, fileName);
+
+            // Copier le contenu de l'image depuis l'URI source vers le nouveau fichier
+            InputStream is = getContentResolver().openInputStream(sourceUri);
+            OutputStream os = new FileOutputStream(destFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            os.close();
+            is.close();
+
+            return Uri.fromFile(destFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Méthode pour générer et sauvegarder un fichier JSON dans le même dossier que l'image copiée
+    private void writeModelDataToJson(String modelName, Uri imageUri, Modele modele) {
+        try {
+            // Recréer le dossier de destination dans Documents (sans sous-dossier pour l'application)
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), modelName + "_" + currentDate);
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+
+            // Sérialiser l'objet modèle en JSON
+            Gson gson = new Gson();
+            String json = gson.toJson(modele);
+
+            File jsonFile = new File(destDir, "data.json");
+            FileWriter writer = new FileWriter(jsonFile);
+            writer.write(json);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Méthode appelée lors de la sauvegarde, qui gère la copie de l'image et la mise à jour de l'URI
+    private void sauvegarderModele() {
+        // Si une image principale a été sélectionnée, on la copie dans le dossier dédié
+        if (uriImage != null) {
+            // Copier l'image et mettre à jour la variable globale uriImage
+            Uri newImageUri = copyImageToFolder(uriImage, gm_name.getText().toString());
+            if (newImageUri != null) {
+                modele.setImagePath(newImageUri.toString());
+            } else {
+                Toast.makeText(this, "Erreur lors de la copie de l'image", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        //Sauvegarde des images vers le dossier
+         for (Piece p : modele.getListePiece()) {
+             HashMap<Photo.Orientation, Photo> listePhoto = p.getListePhoto();
+             for(Photo.Orientation o: listePhoto.keySet()){
+                 Photo ph = p.getListePhoto().get(o);
+                 if(ph != null){
+                     Uri newUri = copyImageToFolder(Uri.parse(ph.getCheminImage()), gm_name.getText().toString());
+                     if(newUri != null) {
+                         ph.setCheminImage(newUri.toString());
+                     }
+                 }
+             }
+        }
+
+        // Créer le dossier et récupérer son URI
+        Uri folderUri = createFolderAndGetUri(gm_name.getText().toString());
+
+        if (folderUri == null) {
+            Toast.makeText(this, "Erreur lors de la création du dossier", Toast.LENGTH_SHORT).show();
+            return;
+        } else{
+            modele.setUriDossier(folderUri.toString());
+        }
+
+        writeModelDataToJson(gm_name.getText().toString(), uriImage, modele);
+    }
+
+    private Uri createFolderAndGetUri(String modelName) {
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String folderName = modelName + "_" + currentDate;
+        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), folderName);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        // Utiliser FileProvider pour obtenir un URI sécurisé
+        return androidx.core.content.FileProvider.getUriForFile(this,
+                getApplicationContext().getPackageName() + ".provider", folder);
     }
 }

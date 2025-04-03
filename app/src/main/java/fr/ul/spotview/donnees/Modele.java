@@ -11,6 +11,7 @@ public class Modele implements Serializable {
     private String nom;                         //Le nom du modèle
     private String imagePath;                   //L'image qui illustre le modèle
     private String descriptif;                  //Le descriptif du modèle
+    private String uriDossier;
 
     // Constructeur par défaut pour Gson
     public Modele() {
@@ -18,6 +19,7 @@ public class Modele implements Serializable {
         this.nom = "";
         this.imagePath = "";
         this.descriptif = "";
+        this.uriDossier = "";
     }
 
     /**
@@ -104,6 +106,14 @@ public class Modele implements Serializable {
      */
     public void setPieceListePiece(int pos, Piece p){
         this.listePiece.set(pos, p);
+    }
+
+    public void setUriDossier(String uri){
+        this.uriDossier = uri;
+    }
+
+    public String getUriDossier(){
+        return this.uriDossier;
     }
 
     @NonNull

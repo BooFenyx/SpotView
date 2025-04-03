@@ -129,7 +129,7 @@ public class DrawingView extends View {
                 // Création de l'objet Acces avec les dimensions calculées
                 if (listener != null) {
                     // Remarque : adaptez l'ordre des paramètres selon votre constructeur Acces
-                    Acces acces = new Acces(null, null, left, top, width, height);
+                    Acces acces = new Acces(null, left, top, width, height);
                     listener.onAccesDrawn(acces);
                 }
                 return true;
