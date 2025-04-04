@@ -77,8 +77,12 @@ public class Visualisation extends AppCompatActivity implements View.OnClickList
         drawingView.setOnAccesClickListener(new DrawingView.OnAccesClickListener() {
             @Override
             public void onAccesClicked(Acces acces) {
-                pEnCoursVisu = acces.getDestination();
-                setImageEnCours();
+                for(Piece p: modeleVisu.getListePiece()){
+                    if(p.getNom().equals(acces.getDestination().getNom())){
+                        pEnCoursVisu = p;
+                        setImageEnCours();
+                    }
+                }
             }
         });
 
