@@ -1,0 +1,4 @@
+// Fichier de build racine — déclare le plugin Android pour le module :app.
+plugins {
+    id 'com.android.application' version '8.1.4' apply false
+}
